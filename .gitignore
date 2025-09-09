@@ -1,0 +1,12 @@
+# Dependencias de Node
+/backend/node_modules
+
+# Archivo de entorno
+/backend/.env
+
+# Dependencias de Composer (para PHP)
+/frontend/vendor
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
