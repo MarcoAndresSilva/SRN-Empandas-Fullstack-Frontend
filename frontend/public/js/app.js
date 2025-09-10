@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tr.innerHTML = `
                     <td>${empanada.name}</td>
                     <td>${empanada.type}</td>
-                    <td>$${parseFloat(empanada.price).toFixed(2)}</td>
+                    <td>$${parseFloat(empanada.price)}</td>
                     <td>
                         <button class="edit-btn" data-id="${
                           empanada.id
@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     submitButton.disabled = true;
     submitButton.textContent = "Guardando...";
 
+    const delayPromise = new Promise((resolve) => setTimeout(resolve, 1000));
+
     const empanadaData = {
       name: document.getElementById("name").value,
       type: document.getElementById("type").value,
@@ -56,13 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const method = id ? "PUT" : "POST";
     const url = id ? `${API_URL}/empanada/${id}` : `${API_URL}/empanada`;
 
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(empanadaData),
-      });
+    const fetchPromise = fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(empanadaData),
+    });
 
+    const [response] = await Promise.all([fetchPromise, delayPromise]);
+
+    try {
       if (response.ok) {
         empanadaForm.reset();
         empanadaIdInput.value = "";
