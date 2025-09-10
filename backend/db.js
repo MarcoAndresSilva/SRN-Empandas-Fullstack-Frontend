@@ -1,6 +1,13 @@
 import mysql from "mysql2/promise";
 
-import "dotenv/config";
+import dotenv from "dotenv";
+
+// Configuramos dotenv para que cargue el archivo .env correspondiente
+if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config();
+}
 
 export const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -11,13 +18,3 @@ export const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-pool
-  .getConnection()
-  .then((connection) => {
-    console.log("¡Conectado a la base de datos MySQL!");
-    connection.release();
-  })
-  .catch((err) => {
-    console.error("Error al conectar con la base de datos:", err);
-  });

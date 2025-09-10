@@ -111,6 +111,8 @@ app.delete("/api/empanada/:id", async (req, res) => {
 });
 
 // 5. ARRANQUE DEL SERVIDOR: Ponemos nuestra API a escuchar peticiones en el puerto especificado.
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
+export { app, server };
