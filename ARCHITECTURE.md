@@ -39,6 +39,15 @@ El backend es una API RESTful construida con Node.js y el framework Express.js. 
 | `PUT`    | `/api/empanada/:id` | Actualiza una empanada existente.       |
 | `DELETE` | `/api/empanada/:id` | Elimina una empanada por su ID.         |
 
+### 2.3. Pruebas
+
+La calidad y fiabilidad del backend se aseguran mediante una suite de pruebas de integración automatizadas.
+
+- **Framework de Pruebas - Jest:** Se eligió Jest por su simplicidad, su potente sistema de aserciones (`expect`) y su ecosistema integrado (runner, mocks, etc.).
+- **Peticiones HTTP - Supertest:** Se utiliza la librería `Supertest` para realizar peticiones HTTP a los endpoints de la API directamente desde el entorno de pruebas, permitiendo verificar tanto los códigos de estado como el contenido de las respuestas.
+- **Entorno de Pruebas:** Se configuró un entorno de pruebas aislado utilizando un archivo `.env.test` y la librería `cross-env`. Esto permite que las pruebas se ejecuten contra la base de datos dockerizada (a través de `localhost`) sin interferir con la configuración de desarrollo principal.
+- **Cobertura:** Se implementaron 3 pruebas clave que cubren el "camino feliz" y los casos de error para los endpoints CRUD, asegurando la funcionalidad principal de la API.
+
 ---
 
 ## 3. Arquitectura del Frontend (CodeIgniter + JavaScript)
