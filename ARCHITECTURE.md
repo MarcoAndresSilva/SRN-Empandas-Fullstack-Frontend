@@ -43,9 +43,20 @@ El backend es una API RESTful construida con Node.js y el framework Express.js. 
 
 ## 3. Arquitectura del Frontend (CodeIgniter + JavaScript)
 
-_(Esta sección la llenaremos cuando lleguemos a la parte del frontend)._
+El frontend es un proyecto monolítico servido por CodeIgniter 4, cuya única responsabilidad es renderizar la interfaz de usuario (UI) y consumir la API REST del backend.
 
----
+### 3.1. Decisiones Clave
+
+- **Framework PHP - CodeIgniter 4:** Se utilizó según los requisitos de la prueba. Su rol en este proyecto se ha minimizado intencionadamente a ser un simple servidor de archivos estáticos y una vista inicial. No se utiliza su ORM (Modelo) ni lógica de negocio compleja, ya que toda esa responsabilidad recae en el backend de Node.js. El controlador `Home.php` se modificó mínimamente para servir la vista principal `empanadas_view.php`.
+
+- **Lógica de Cliente - JavaScript Puro (Vanilla JS) con `fetch`:** Toda la interactividad y comunicación con la API se maneja en el lado del cliente a través de un único archivo JavaScript (`public/js/app.js`). Se eligió la API `fetch` por ser el estándar moderno para realizar peticiones HTTP asíncronas (AJAX), ofreciendo una sintaxis limpia y basada en promesas (`async/await`).
+
+- **Estructura:**
+  - `app/Controllers/Home.php`: Controlador que renderiza la vista.
+  - `app/Views/empanadas_view.php`: Archivo PHP que contiene el esqueleto HTML de la aplicación.
+  - `public/js/app.js`: Contiene toda la lógica para listar, crear, editar y eliminar empanadas interactuando con la API REST.
+
+Este enfoque desacoplado permite que el frontend sea un "cliente tonto" que solo se preocupa de la presentación, siguiendo las mejores prácticas de arquitecturas cliente-servidor.
 
 ## 4. Orquestación y Despliegue (Docker)
 
