@@ -28,7 +28,7 @@
             <textarea id="filling" rows="3"></textarea>
             
             <label for="price">Precio:</label>
-            <input type="number" id="price" step="0.01" required>
+            <input type="number" id="price" step="0.01" min="1" required>
             
             <button type="submit">Guardar</button>
         </form>

@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const empanadaForm = document.getElementById("empanada-form");
   const formTitle = document.getElementById("form-title");
   const empanadaIdInput = document.getElementById("empanada-id");
+  const submitButton = empanadaForm.querySelector('button[type="submit"]');
 
   // --- FUNCIÓN PARA OBTENER Y MOSTRAR LAS EMPANADAS (GET) ---
   const fetchEmpanadas = async () => {
@@ -40,7 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- MANEJO DEL FORMULARIO PARA CREAR Y EDITAR (POST/PUT) ---
   empanadaForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const formData = new FormData(empanadaForm);
+
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = "Guardando...";
+
     const empanadaData = {
       name: document.getElementById("name").value,
       type: document.getElementById("type").value,
@@ -65,12 +70,17 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchEmpanadas();
       } else {
         console.error("Error al guardar la empanada.");
+        const errorData = await response.json();
+        alert(`Error al guardar: ${errorData.message || "Error desconocido"}`);
       }
     } catch (error) {
       console.error("Error de red:", error);
+      alert("Error de red al intentar guardar. Revisa la conexión con la API.");
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
     }
   });
-
   // --- MANEJO DE CLICS EN BOTONES DE LA TABLA (EDITAR/ELIMINAR) ---
   tablaBody.addEventListener("click", async (event) => {
     const target = event.target;
