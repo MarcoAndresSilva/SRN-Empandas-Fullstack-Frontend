@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db_empanadas
+    restart: always
+
+    # variables de entorno para configurar MySQL. Estos valores DEBEN COINCIDIR con los de tu archivo .env del backend.
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: empanadas_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  #  API de Node.js ---
+  api:
+    build: ./backend
+    container_name: node_api_empanadas # Nombre para el contenedor de la API.
+    restart: always
+
+    # para acceder a la API desde nuestro navegador o Postman en http://localhost:3000.
+    ports:
+      - "3000:3000"
+
+    # variables de entorno para configurar MySQL. Estos valores DEBEN COINCIDIR con los de tu archivo .env del backend.
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: empanadas_db
+      PORT: 3000
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
