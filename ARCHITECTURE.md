@@ -67,6 +67,8 @@ El frontend es un proyecto monolítico servido por CodeIgniter 4, cuya única re
 
 Este enfoque desacoplado permite que el frontend sea un "cliente tonto" que solo se preocupa de la presentación, siguiendo las mejores prácticas de arquitecturas cliente-servidor.
 
+- **Experiencia de Usuario (UX):** Se implementaron validaciones de formulario del lado del cliente utilizando atributos HTML5 para garantizar la integridad básica de los datos antes del envío. Adicionalmente, se mejoró el feedback al usuario deshabilitando el botón de envío y mostrando un estado de "Guardando..." durante las peticiones asíncronas, evitando envíos duplicados.
+
 ## 4. Orquestación y Despliegue (Docker)
 
 La aplicación está completamente dockerizada para garantizar un entorno de desarrollo consistente, portable y fácil de ejecutar. Se utiliza `Docker Compose` para orquestar los servicios de la aplicación.
