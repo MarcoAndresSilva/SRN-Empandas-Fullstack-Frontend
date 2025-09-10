@@ -49,9 +49,26 @@ _(Esta sección la llenaremos cuando lleguemos a la parte del frontend)._
 
 ## 4. Orquestación y Despliegue (Docker)
 
-_(Esta sección la llenaremos cuando configuremos Docker)._
+La aplicación está completamente dockerizada para garantizar un entorno de desarrollo consistente, portable y fácil de ejecutar. Se utiliza `Docker Compose` para orquestar los servicios de la aplicación.
 
----
+### 4.1. Servicios Definidos
+
+- **`db` (Base de Datos):**
+
+  - **Imagen:** `mysql:8.0`.
+  - **Responsabilidad:** Provee una instancia aislada de la base de datos MySQL.
+  - **Persistencia:** Utiliza un volumen de Docker (`mysql_data`) para que los datos persistan incluso si el contenedor se reinicia o se elimina.
+  - **`healthcheck`:** Se ha implementado un `healthcheck` que utiliza `mysqladmin ping`. Esto es crucial para asegurar que el servicio de la API no intente conectarse a la base de datos hasta que esta esté completamente inicializada y lista para aceptar conexiones, resolviendo así posibles condiciones de carrera durante el arranque.
+
+- **`api` (Backend Node.js):**
+  - **Construcción:** Se construye a partir de un `Dockerfile` ubicado en la carpeta `backend`.
+  - **Imagen Base:** `node:18-alpine` para un tamaño de imagen reducido y mayor seguridad.
+  - **Red:** Docker Compose crea una red interna que permite que la API se comunique con el servicio `db` utilizando su nombre de servicio (`http://db:3306`) como host, en lugar de `localhost`.
+  - **Dependencia:** El servicio `api` depende explícitamente del estado "saludable" (`service_healthy`) del servicio `db`, gracias al `healthcheck`.
+
+### 4.2. Flujo de Ejecución
+
+Con Docker Desktop corriendo, un desarrollador puede levantar toda la infraestructura de backend con un único comando: `docker-compose up --build`. Esto demuestra la facilidad de configuración y reduce drásticamente el tiempo de onboarding para nuevos miembros del equipo.
 
 ## 5. Control de Versiones (Git)
 
