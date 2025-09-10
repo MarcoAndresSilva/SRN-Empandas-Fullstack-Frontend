@@ -5,22 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Empanadas</title>
     <!-- Un poco de estilo para que se vea decente -->
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #333; }
-        h1, h2 { color: #d9534f; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f8f8f8; }
-        form { background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
-        input, textarea, button { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background-color: #5cb85c; color: white; border: none; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #4cae4c; }
-        .delete-btn { background-color: #d9534f; }
-        .delete-btn:hover { background-color: #c9302c; }
-        .edit-btn { background-color: #f0ad4e; margin-right: 5px; }
-        .edit-btn:hover { background-color: #ec971f; }
-        td button { width: auto; display: inline-block; padding: 8px 12px; }
-    </style>
+
+        <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
