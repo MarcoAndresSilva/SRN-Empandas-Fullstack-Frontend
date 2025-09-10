@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.textContent = originalButtonText;
     }
   });
+
   // --- MANEJO DE CLICS EN BOTONES DE LA TABLA (EDITAR/ELIMINAR) ---
   tablaBody.addEventListener("click", async (event) => {
     const target = event.target;
