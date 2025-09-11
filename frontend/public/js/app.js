@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   // CONFIGURACIÓN Y SELECTORES DEL DOM
-  const API_URL = "http://localhost:3000/api";
+  // const API_URL = "http://localhost:3000/api";
+  const API_URL =
+    "https://srn-empanadas-ffronend-production-faf5.up.railway.app/api";
   const API_KEY = "mi-clave-ultra-secreta-12345";
 
   const tbody = document.getElementById("empanadas-table-body");

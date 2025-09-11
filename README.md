@@ -1,26 +1,12 @@
 # App gestión de empanadas chilenas: “Fonda SRN” 
+Una aplicación web full-stack robusta y desacoplada para la gestión de empanadas, desarrollada como solución al desafío técnico para el rol de **Desarrollador Fullstack Frontend**. El proyecto demuestra competencias en la arquitectura de microservicios, orquestación con Docker, desarrollo de API RESTful y consumo de servicios desde un frontend monolítico.
 
 ## 📸 Vistas Previas
-
-<!-- Vista General arriba centrada -->
 <p align="center">
   <img src="https://github.com/user-attachments/assets/9622b9d9-8e20-4ef5-8b4f-a875702d3d40"
        alt="Vista General"
-       width="900" />
+       width="700" />
 </p>
-
-<!-- Vista Añadir y Editar abajo lado a lado -->
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/f3dc0982-544f-4f91-add0-8279ccfdf8e4"
-       alt="Vista Añadir"
-       width="440" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/719680c8-9732-4e96-a36c-68f2e4ab5d9a"
-       alt="Vista Editar"
-       width="440" />
-</p>
-
-Una aplicación web full-stack robusta y desacoplada para la gestión de empanadas, desarrollada como solución al desafío técnico para el rol de **Desarrollador Fullstack Frontend**. El proyecto demuestra competencias en la arquitectura de microservicios, orquestación con Docker, desarrollo de API RESTful y consumo de servicios desde un frontend monolítico.
 
 ---
 
@@ -76,6 +62,24 @@ Este proyecto fue concebido siguiendo principios de diseño de software modernos
 </p>
 
 ---
+
+
+## ☁️ Demo en Vivo y Despliegue
+
+La arquitectura desacoplada de este proyecto permite el despliegue independiente de sus componentes. Actualmente, el backend está completamente desplegado y operativo en la nube.
+
+### **Backend API (Desplegado en Railway)**
+
+La API REST, construida con Node.js y Docker, está alojada en Railway y conectada a una base de datos MySQL. Es completamente funcional y puede ser probada con cualquier cliente de API como Insomnia o Postman.
+
+-   **URL Base de la API:** `https://srn-empanadas-ffronend-production-faf5.up.railway.app`
+-   **Endpoint de Ejemplo (GET):** `https://srn-empanadas-ffronend-production-faf5.up.railway.app/api/empanadas`
+-   **API Key Requerida:** Todas las peticiones deben incluir el siguiente encabezado HTTP:
+    -   `X-API-KEY`: `mi-clave-ultra-secreta-12345`
+
+### **Frontend (Ejecución Local)**
+
+Debido a desafíos de compatibilidad con los runtimes de PHP en las principales plataformas serverless, el frontend de CodeIgniter está configurado para una ejecución local óptima, conectándose directamente a la API en producción. Las instrucciones completas se encuentran en la sección "Instalación y Ejecución Local".
 
 ## ⚙️ Instalación y Ejecución Local
 
@@ -135,6 +139,14 @@ exit;
 ### 4. Iniciar el Frontend (CodeIgniter)
 
 En una tercera terminal, navega a la carpeta del frontend y levanta el servidor de desarrollo de PHP.
+
+```bash
+cd frontend
+sudo apt install php-cli php-xml unzip curl -y   # solo la primera vez
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+composer install
+```
 
 ```bash
 cd frontend
