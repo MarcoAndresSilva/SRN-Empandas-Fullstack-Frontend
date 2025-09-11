@@ -30,6 +30,7 @@ describe("API de Empanadas - Pruebas de Endpoints", () => {
       name: "Napolitana",
       type: "Horno",
       price: 2200,
+      is_sold_out: false,
     };
     const response = await request(app)
       .post("/api/empanada")
@@ -38,6 +39,7 @@ describe("API de Empanadas - Pruebas de Endpoints", () => {
 
     expect(response.statusCode).toBe(201);
     expect(response.body.name).toBe(nuevaEmpanada.name);
+    expect(response.body.is_sold_out).toBe(false);
     expect(response.body).toHaveProperty("id");
   });
 

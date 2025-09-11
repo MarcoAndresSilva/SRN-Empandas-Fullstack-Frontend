@@ -26,7 +26,7 @@ const apiKeyMiddleware = (req, res, next) => {
 app.use("/api", apiKeyMiddleware);
 
 // RUTAS (ENDPOINTS)
-// --- OBTENER TODAS LAS EMPANADAS (GET /api/empanadas)
+// OBTENER TODAS LAS EMPANADAS (GET /api/empanadas)
 app.get("/api/empanadas", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -42,7 +42,7 @@ app.get("/api/empanadas", async (req, res) => {
 // CREAR EMPANADA (POST /api/empanada)
 app.post("/api/empanada", async (req, res) => {
   try {
-    const { name, type, filling, price } = req.body;
+    const { name, type, filling, price, is_sold_out } = req.body;
 
     if (!name || !type) {
       return res
@@ -50,8 +50,8 @@ app.post("/api/empanada", async (req, res) => {
         .json({ message: "El nombre y el tipo son obligatorios" });
     }
     const [result] = await pool.query(
-      "INSERT INTO empanadas (name, type, filling, price) VALUES (?, ?, ?, ?)",
-      [name, type, filling, price]
+      "INSERT INTO empanadas (name, type, filling, price, is_sold_out) VALUES (?, ?, ?, ?, ?)",
+      [name, type, filling, price, is_sold_out || false]
     );
 
     res.status(201).json({
@@ -60,6 +60,7 @@ app.post("/api/empanada", async (req, res) => {
       type,
       filling,
       price,
+      is_sold_out: is_sold_out || false,
     });
   } catch (error) {
     console.error(error);
