@@ -1,4 +1,4 @@
-/* ===== variables y base ===== */
+/* variables y base */
 :root {
   --bg: #f4f7f6;
   --text: #222;
@@ -28,7 +28,7 @@ body {
   padding: 16px 24px;
 }
 
-/* ===== header + toolbar ===== */
+/* header + toolbar */
 .app-header {
   position: sticky;
   top: 0;
@@ -40,6 +40,7 @@ body {
   border-bottom: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: saturate(1.15) blur(4px);
+  text-align: center;
 }
 .app-header h1 {
   margin: 0;
@@ -53,9 +54,13 @@ body {
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 16px;
+}
+.toolbar input {
+  flex-grow: 1;
 }
 
-/* ===== inputs/botones ===== */
+/* inputs/botones*/
 .input,
 .select {
   padding: 10px 12px;
@@ -101,7 +106,7 @@ body {
   align-items: center;
 }
 
-/* ===== card/tabla ===== */
+/*card/tabla*/
 .card {
   margin: 16px 0;
   border: 1px solid var(--border);
@@ -155,7 +160,7 @@ body {
   color: var(--danger);
 }
 
-/* ===== modal ===== */
+/* modal*/
 .modal[hidden] {
   display: none;
 }
@@ -203,7 +208,7 @@ body {
   border-top: 1px solid var(--border);
 }
 
-/* ===== toast ===== */
+/* toast */
 .toast[hidden] {
   display: none;
 }
@@ -220,7 +225,7 @@ body {
   z-index: 101;
 }
 
-/* ===== skeleton ===== */
+/* skeleton */
 .skel {
   height: 14px;
   background: linear-gradient(90deg, #f0f0f0, #e0e0e0, #f0f0f0);

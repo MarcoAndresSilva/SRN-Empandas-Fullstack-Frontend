@@ -11,9 +11,6 @@
   <!-- Header fijo con CTA -->
   <header class="app-header">
     <h1>App gestión de empanadas chilenas: “Fonda SRN”</h1>
-    <button id="btnOpenCreate" class="btn btn-primary">
-      <span class="icon">＋</span> Añadir empanada
-    </button>
   </header>
 
   <!-- Toolbar: búsqueda + filtros -->
@@ -28,6 +25,9 @@
       <input id="onlyAvailable" type="checkbox">
       <span>Solo disponibles</span>
     </label>
+    <button id="btnOpenCreate" class="btn btn-primary">
+      <span class="icon">＋</span> Añadir empanada
+    </button>
   </section>
 
   <!-- Card principal con tabla -->
