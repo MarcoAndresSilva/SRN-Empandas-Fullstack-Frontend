@@ -2,11 +2,11 @@
 
 import request from "supertest";
 import { app, server } from "../index.js";
-import { pool } from "../db.js"; // Importamos el pool para poder cerrarlo
+import { pool } from "../db.js";
 
-// Hooks de Jest para controlar el ciclo de vida
+const API_KEY = "mi-clave-ultra-secreta-12345";
+
 beforeAll((done) => {
-  // Nos aseguramos de que el servidor esté escuchando antes de correr las pruebas
   done();
 });
 
@@ -16,10 +16,10 @@ afterAll(async () => {
 });
 
 describe("API de Empanadas - Pruebas de Endpoints", () => {
-  // ... tus 3 tests quedan exactamente iguales aquí dentro ...
-
   test("GET /api/empanadas - Debería devolver un array de empanadas", async () => {
-    const response = await request(app).get("/api/empanadas");
+    const response = await request(app)
+      .get("/api/empanadas")
+      .set("X-API-KEY", API_KEY);
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(Array.isArray(response.body)).toBe(true);
@@ -33,6 +33,7 @@ describe("API de Empanadas - Pruebas de Endpoints", () => {
     };
     const response = await request(app)
       .post("/api/empanada")
+      .set("X-API-KEY", API_KEY)
       .send(nuevaEmpanada);
 
     expect(response.statusCode).toBe(201);
@@ -44,9 +45,18 @@ describe("API de Empanadas - Pruebas de Endpoints", () => {
     const empanadaInvalida = { type: "Frita", price: 1500 };
     const response = await request(app)
       .post("/api/empanada")
+      .set("X-API-KEY", API_KEY)
       .send(empanadaInvalida);
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe("El nombre y el tipo son obligatorios");
+  });
+
+  test("GET /api/empanadas - Debería fallar si el API Key es incorrecto", async () => {
+    const response = await request(app)
+      .get("/api/empanadas")
+      .set("X-API-KEY", "esta-clave-es-incorrecta");
+
+    expect(response.statusCode).toBe(401);
   });
 });

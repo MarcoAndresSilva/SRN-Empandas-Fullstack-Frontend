@@ -1,58 +1,59 @@
-// 1. IMPORTACIONES
-import express from "express"; // El esqueleto del servidor
-import cors from "cors"; // El portero que permite las conexiones
-import { pool } from "./db.js"; // Nuestra conexión a la base de datos
+// IMPORTACIONES
+import express from "express";
+import cors from "cors";
+import { pool } from "./db.js";
 
-// 2. INICIALIZACIÓN
+// INICIALIZACIÓN
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 3. MIDDLEWARE: Son "ayudantes" que procesan la petición antes de que llegue a nuestras rutas.
-app.use(cors()); // Usamos el portero para permitir peticiones desde el frontend
-app.use(express.json()); // Este ayudante permite que nuestro servidor entienda JSON que nos envíe el frontend.
+// MIDDLEWARE:
+app.use(cors());
+app.use(express.json());
 
-// 4. RUTAS (ENDPOINTS): Las direcciones de nuestra API
+const apiKeyMiddleware = (req, res, next) => {
+  const apiKey = req.headers["x-api-key"];
 
-// --- OBTENER TODAS LAS EMPANADAS (GET /api/empanadas) ---
+  if (apiKey && apiKey === process.env.API_KEY_SECRET) {
+    next();
+  } else {
+    res.status(401).json({
+      message: "Acceso no autorizado: API Key inválida o no proporcionada.",
+    });
+  }
+};
+
+app.use("/api", apiKeyMiddleware);
+
+// RUTAS (ENDPOINTS)
+// --- OBTENER TODAS LAS EMPANADAS (GET /api/empanadas)
 app.get("/api/empanadas", async (req, res) => {
   try {
-    // Le pedimos al pool de conexiones que ejecute una consulta SQL.
-    // La consulta 'SELECT * FROM empanadas' significa "selecciona todas las columnas de la tabla empanadas".
     const [rows] = await pool.query(
       "SELECT * FROM empanadas ORDER BY created_at DESC"
     );
-    // Enviamos las filas (rows) obtenidas como respuesta en formato JSON.
     res.json(rows);
   } catch (error) {
-    // Si algo sale mal (ej: la tabla no existe), capturamos el error.
     console.error(error);
-    // Enviamos una respuesta de error al cliente.
     res.status(500).json({ message: "Error al obtener las empanadas" });
   }
 });
 
-// --- CREAR UNA NUEVA EMPANADA (POST /api/empanada) ---
+// CREAR EMPANADA (POST /api/empanada)
 app.post("/api/empanada", async (req, res) => {
   try {
-    // Sacamos los datos de la nueva empanada del "cuerpo" (body) de la petición.
     const { name, type, filling, price } = req.body;
 
-    // Una pequeña validación para asegurar que los datos importantes vienen.
     if (!name || !type) {
       return res
         .status(400)
         .json({ message: "El nombre y el tipo son obligatorios" });
     }
-
-    // Ejecutamos la consulta SQL para insertar los datos.
-    // Usamos '?' para prevenir ataques de inyección SQL. Los valores se pasan en un array.
     const [result] = await pool.query(
       "INSERT INTO empanadas (name, type, filling, price) VALUES (?, ?, ?, ?)",
       [name, type, filling, price]
     );
 
-    // Respondemos al cliente con un código 201 (Creado) y le devolvemos
-    // los datos de la empanada creada, incluyendo el nuevo ID.
     res.status(201).json({
       id: result.insertId,
       name,
@@ -66,18 +67,17 @@ app.post("/api/empanada", async (req, res) => {
   }
 });
 
-// --- ACTUALIZAR UNA EMPANADA (PUT /api/empanada/:id) ---
+// ACTUALIZAR EMPANADA (PUT /api/empanada/:id)
 app.put("/api/empanada/:id", async (req, res) => {
   try {
-    const { id } = req.params; // Obtenemos el ID de la URL
-    const { name, type, filling, price, is_sold_out } = req.body; // Obtenemos los nuevos datos
+    const { id } = req.params;
+    const { name, type, filling, price, is_sold_out } = req.body;
 
     const [result] = await pool.query(
       "UPDATE empanadas SET name = ?, type = ?, filling = ?, price = ?, is_sold_out = ? WHERE id = ?",
       [name, type, filling, price, is_sold_out, id]
     );
 
-    // Si la consulta no afectó a ninguna fila, significa que la empanada no existía.
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Empanada no encontrada" });
     }
@@ -89,11 +89,10 @@ app.put("/api/empanada/:id", async (req, res) => {
   }
 });
 
-// --- ELIMINAR UNA EMPANADA (DELETE /api/empanada/:id) ---
+// ELIMINAR EMPANADA (DELETE /api/empanada/:id)
 app.delete("/api/empanada/:id", async (req, res) => {
   try {
-    const { id } = req.params; // Obtenemos el ID de la URL
-
+    const { id } = req.params;
     const [result] = await pool.query("DELETE FROM empanadas WHERE id = ?", [
       id,
     ]);
@@ -102,7 +101,6 @@ app.delete("/api/empanada/:id", async (req, res) => {
       return res.status(404).json({ message: "Empanada no encontrada" });
     }
 
-    // Respondemos con un código 204 (Sin Contenido), que es lo estándar para un DELETE exitoso.
     res.sendStatus(204);
   } catch (error) {
     console.error(error);
@@ -110,7 +108,7 @@ app.delete("/api/empanada/:id", async (req, res) => {
   }
 });
 
-// 5. ARRANQUE DEL SERVIDOR: Ponemos nuestra API a escuchar peticiones en el puerto especificado.
+//  ARRANQUE DEL SERVIDOR
 const server = app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
