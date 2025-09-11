@@ -1,7 +1,23 @@
-# Fonda "El Programador": Gestión de Empanadas
+# App gestión de empanadas chilenas: “Fonda SRN” 
 
+## 📸 Vistas Previas
+
+<!-- Vista General arriba centrada -->
 <p align="center">
-  <img src="https://i.imgur.com/GzXkL8P.png" alt="Captura de pantalla de la aplicación de gestión de empanadas" />
+  <img src="https://github.com/user-attachments/assets/9622b9d9-8e20-4ef5-8b4f-a875702d3d40"
+       alt="Vista General"
+       width="900" />
+</p>
+
+<!-- Vista Añadir y Editar abajo lado a lado -->
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f3dc0982-544f-4f91-add0-8279ccfdf8e4"
+       alt="Vista Añadir"
+       width="440" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/719680c8-9732-4e96-a36c-68f2e4ab5d9a"
+       alt="Vista Editar"
+       width="440" />
 </p>
 
 Una aplicación web full-stack robusta y desacoplada para la gestión de empanadas, desarrollada como solución al desafío técnico para el rol de **Desarrollador Fullstack Frontend**. El proyecto demuestra competencias en la arquitectura de microservicios, orquestación con Docker, desarrollo de API RESTful y consumo de servicios desde un frontend monolítico.
