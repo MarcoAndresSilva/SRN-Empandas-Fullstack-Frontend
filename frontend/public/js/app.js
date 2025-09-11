@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_URL = "http://localhost:3000/api";
+  const API_KEY = "mi-clave-ultra-secreta-12345";
   const tablaBody = document.getElementById("empanadas-table-body");
   const empanadaForm = document.getElementById("empanada-form");
   const formTitle = document.getElementById("form-title");
   const empanadaIdInput = document.getElementById("empanada-id");
   const submitButton = empanadaForm.querySelector('button[type="submit"]');
 
-  // --- FUNCIÓN PARA OBTENER Y MOSTRAR LAS EMPANADAS (GET) ---
+  // OBTENER Y MOSTRAR EMPANADAS (GET)
   const fetchEmpanadas = async () => {
     try {
-      const response = await fetch(`${API_URL}/empanadas`);
+      const response = await fetch(`${API_URL}/empanadas`, {
+        headers: {
+          "X-API-KEY": API_KEY,
+        },
+      });
       const empanadas = await response.json();
       tablaBody.innerHTML = "";
       empanadas.forEach((empanada) => {
@@ -38,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // --- MANEJO DEL FORMULARIO PARA CREAR Y EDITAR (POST/PUT) ---
+  // FORMULARIO PARA CREAR Y EDITAR (POST/PUT)
   empanadaForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -60,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const fetchPromise = fetch(url, {
       method: method,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-API-KEY": API_KEY },
       body: JSON.stringify(empanadaData),
     });
 
@@ -86,17 +91,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // --- MANEJO DE CLICS EN BOTONES DE LA TABLA (EDITAR/ELIMINAR) ---
+  // MANEJO DE CLICS EN BOTONES DE LA TABLA (EDITAR/ELIMINAR)
   tablaBody.addEventListener("click", async (event) => {
     const target = event.target;
     const id = target.dataset.id;
 
-    // Botón Eliminar
     if (target.classList.contains("delete-btn")) {
       if (confirm("¿Estás seguro de que quieres eliminar esta empanada?")) {
         try {
           const response = await fetch(`${API_URL}/empanada/${id}`, {
             method: "DELETE",
+            headers: {
+              "X-API-KEY": API_KEY,
+            },
           });
           if (response.ok) {
             fetchEmpanadas();
