@@ -75,22 +75,31 @@ Para clonar y ejecutar este proyecto en tu máquina local, sigue estos pasos.
 ```bash
 git clone https://github.com/MarcoAndresSilva/srn-empanadas-ffronend.git
 cd srn-empanadas-ffronend
-2. Iniciar el Backend y la Base de Datos (Docker)
+```
+
+### 2. Iniciar el Backend y la Base de Datos (Docker)
+
 Este comando levantará los contenedores de la API y la base de datos MySQL. La primera vez puede tardar unos minutos mientras se descargan las imágenes.
-code
-Bash
+
+```bash
 docker-compose up --build
+```
+
 La API estará disponible en http://localhost:3000.
 La base de datos estará accesible en localhost:3306.
-3. Crear la Tabla en la Base de Datos
+
+### 3. Crear la Tabla en la Base de Datos
+
 Con los contenedores corriendo, abre una nueva terminal y ejecuta el siguiente comando para acceder a la CLI de MySQL:
-code
-Bash
+
+```bash
 docker exec -it mysql_db_empanadas mysql -u user -p
+```
+
 Cuando pida la contraseña, introduce: password.
-Una vez dentro (mysql>), selecciona la base de datos y ejecuta el script de creación de la tabla:
-code
-SQL
+Una vez dentro del prompt mysql>, ejecuta el siguiente script SQL para crear la tabla:
+
+```SQL
 USE empanadas_db;
 
 CREATE TABLE empanadas (
@@ -105,17 +114,24 @@ CREATE TABLE empanadas (
 );
 
 exit;
-4. Iniciar el Frontend (CodeIgniter)
+```
+
+### 4. Iniciar el Frontend (CodeIgniter)
+
 En una tercera terminal, navega a la carpeta del frontend y levanta el servidor de desarrollo de PHP.
-code
-Bash
+
+```bash
 cd frontend
 php spark serve
+```
+
 La interfaz de usuario estará disponible en http://localhost:8080.
-5. Ejecutar las Pruebas Unitarias
+
+### 5. Ejecutar las Preras Unitarias
+
 Para verificar la salud del backend, puedes ejecutar la suite de pruebas desde la carpeta backend:
-code
-Bash
+
+```bash
 cd backend
 npm test
 ```
