@@ -100,3 +100,11 @@ Se utiliza un flujo de trabajo basado en ramas para separar el desarrollo de nue
 - **`feature/*`:** Ramas de características (ej. `feature/backend-api`, `feature/frontend-ui`). Todo el desarrollo nuevo se realiza en estas ramas y luego se fusiona en `main` a través de Pull Requests (o merge directo para este proyecto).
 
 Los commits se realizan de forma atómica y siguen la convención de Commits Convencionales (ej. `feat:`, `fix:`, `docs:`) para mantener un historial claro y legible.
+
+## 6. Seguridad
+
+Se ha implementado una capa de seguridad básica pero efectiva para proteger los endpoints de la API.
+
+- **Autenticación por API Key:** Todas las rutas bajo `/api/` están protegidas por un middleware que verifica la presencia y validez de un encabezado `X-API-KEY` en cada petición.
+- **Almacenamiento de Secretos:** La clave secreta de la API se almacena de forma segura como una variable de entorno utilizando la librería `dotenv`, evitando que quede expuesta en el código fuente.
+- **Respuesta ante Fallos:** Si la API Key es inválida o no se proporciona, la API responde con un código de estado `401 Unauthorized` y deniega el acceso, impidiendo que la petición llegue a la lógica de negocio.
