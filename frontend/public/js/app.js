@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("filling").value = target.dataset.filling;
       document.getElementById("price").value = target.dataset.price;
       formTitle.textContent = "Editar Empanada";
-      window.scrollTo(0, 0); // Sube la página al inicio para ver el form
+      window.scrollTo(0, 0);
     }
   });
 
