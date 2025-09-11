@@ -108,3 +108,22 @@ Se ha implementado una capa de seguridad básica pero efectiva para proteger los
 - **Autenticación por API Key:** Todas las rutas bajo `/api/` están protegidas por un middleware que verifica la presencia y validez de un encabezado `X-API-KEY` en cada petición.
 - **Almacenamiento de Secretos:** La clave secreta de la API se almacena de forma segura como una variable de entorno utilizando la librería `dotenv`, evitando que quede expuesta en el código fuente.
 - **Respuesta ante Fallos:** Si la API Key es inválida o no se proporciona, la API responde con un código de estado `401 Unauthorized` y deniega el acceso, impidiendo que la petición llegue a la lógica de negocio.
+
+## 7. Desafíos Técnicos y Soluciones Implementadas
+
+Durante el desarrollo de este proyecto, surgieron varios desafíos técnicos que requirieron investigación y la aplicación de soluciones específicas. Documentarlos es clave para entender la robustez de la arquitectura final.
+
+### 1. Condición de Carrera en el Arranque de Contenedores Docker
+
+- **El Problema:** Al iniciar los servicios con `docker-compose up`, el contenedor de la API (`api`) arrancaba más rápido que el contenedor de la base de datos (`db`). Esto provocaba que la API intentara establecer una conexión antes de que MySQL estuviera listo para aceptarlas, resultando en un error `ECONNREFUSED` y la caída del servicio de Node.js.
+- **La Solución:** La directiva `depends_on` en Docker Compose no fue suficiente, ya que solo garantiza el orden de inicio de los contenedores, no la disponibilidad del servicio _dentro_ de ellos. La solución robusta fue implementar un `healthcheck` en el servicio `db`. Este chequeo utiliza el comando `mysqladmin ping` para verificar activamente que el servidor MySQL esté respondiendo. Complementariamente, se modificó la dependencia del servicio `api` a `condition: service_healthy`, forzando a la API a esperar hasta que la base de datos no solo estuviera iniciada, sino completamente operativa.
+
+### 2. Incompatibilidad de Módulos (ESM vs. CommonJS) en el Entorno de Pruebas
+
+- **El Problema:** El código fuente del backend fue escrito utilizando la sintaxis moderna de ES Modules (`import`/`export`), especificado con `"type": "module"` en `package.json`. Sin embargo, Jest, por defecto, opera en un entorno de CommonJS (`require`/`module.exports`), lo que generaba un `SyntaxError: Cannot use import statement outside a module` al intentar ejecutar las pruebas.
+- **La Solución:** Se resolvió instruyendo a Node.js para que ejecutara Jest utilizando su soporte experimental para módulos de VM. El script `test` en `package.json` fue modificado a: `"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"`. Esto permitió que el entorno de pruebas interpretara correctamente la sintaxis de ES Modules sin necesidad de transpiladores como Babel, manteniendo la configuración del proyecto limpia y consistente.
+
+### 3. Fugas de Recursos ("Open Handles") al Finalizar las Pruebas
+
+- **El Problema:** Después de que las pruebas se ejecutaban exitosamente, Jest advertía sobre "open handles" y no finalizaba el proceso limpiamente. Esto se debía a que las conexiones a la base de datos (el `pool` de `mysql2`) y el propio servidor de Express (`app.listen`) permanecían activos en memoria.
+- **La Solución:** Se implementaron los hooks `afterAll` de Jest para gestionar el ciclo de vida de los recursos. Utilizando `async/await`, se programó el cierre explícito y ordenado de los servicios: primero se cierra el servidor de Express (`server.close()`) y luego se cierra el pool de conexiones de la base de datos (`pool.end()`). Esto aseguró una finalización limpia del proceso de pruebas, liberando todos los recursos correctamente.
